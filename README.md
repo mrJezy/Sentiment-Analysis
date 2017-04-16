@@ -1,2 +1,2 @@
 # Sentiment Analysis
-Sentiment analysis of political tweets
+Sentiment analysis of hungarian political tweets
