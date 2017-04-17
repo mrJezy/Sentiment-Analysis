@@ -126,8 +126,8 @@ $(document).ready(function () {
 <li>#istandwithCEU - the most used supporting hashtag of the Central European University</li>
 </ol>
 <p>The tweets used in this project are from 1st until 14th April 2017.</p>
-<div id="note-the-project-doesnt-want-to-take-a-stand-on-or-against-any-political-sides-it-only-shows-an-example-of-how-a-data-science-tool-can-be-applyied-to-a-specific-topic." class="section level6">
-<h6><em>NOTE: The project doesn’t want to take a stand on or against any political sides, it only shows an example of how a data science tool can be applyied to a specific topic.</em></h6>
+<div id="note-the-project-doesnt-want-to-take-a-stand-on-or-against-any-political-sides-it-only-shows-an-example-of-how-to-use-r-as-a-data-science-tool-to-do-a-sentiment-analysis.-therefore-the-results-will-not-be-discussed." class="section level6">
+<h6><em>NOTE: The project doesn’t want to take a stand on or against any political sides, it only shows an example of how to use R as a data science tool to do a sentiment analysis. Therefore the results will not be discussed.</em></h6>
 <hr />
 <p>I should give a huge credit to the authors of the following 2 blog articles, because the large part of the code used in this project was borrowed from them:</p>
 <ul>
@@ -139,12 +139,12 @@ $(document).ready(function () {
 <p>Reading the 2 csv files, that has been scraped from Twitter using the <a href="https://cran.r-project.org/web/packages/twitteR/index.html">twitteR</a> package.</p>
 <pre class="r"><code>t_orban &lt;- read.csv('/Users/mac/Desktop/Egyetem/Data\ Science/Twitter/feed_orban.csv')
 t_ceu &lt;- read.csv('/Users/mac/Desktop/Egyetem/Data\ Science/Twitter/feed_ceu.csv')</code></pre>
-<p>Reading in the dictionary of positive and negative words</p>
+<p>Reading in the dictionary of positive and negative words, which is a list of 6800 positive and negative words compiled by Bing Liu and Minqing Hu of the University of Illinois at Chicago. You can download it <a href="http://www.cs.uic.edu/~liub/FBS/opinion-lexicon-English.rar">here</a>.</p>
 <pre class="r"><code>good_text = scan('/Users/mac/Desktop/Egyetem/Data\ Science/Twitter/positive-words.txt',
            what='character', comment.char=';')
 bad_text = scan('/Users/mac/Desktop/Egyetem/Data\ Science/Twitter/negative-words.txt',
            what='character', comment.char=';')</code></pre>
-<p>Sentiment analysis function</p>
+<p>The next thing is to load a huge function, which will score the tweets, by searching for the positive and negative word instances in the text.</p>
 <pre class="r"><code>score.sentiment = function(sentences, good_text, bad_text, .progress='none')
 {
         library(plyr)
@@ -196,9 +196,10 @@ library(ggthemes)
 library(tidyr)
 library(dplyr)
 library(stringr)</code></pre>
-<p>Making a 3 color gradient palette between using the shades of green, yellow and red:</p>
+<p>The upcoming barchart will be filled up with 3 color gradient, using the shades of green, yellow and red. Here is how the palette is created:</p>
 <pre class="r"><code>colpal &lt;- colorRampPalette(c(&quot;green3&quot;, &quot;lemonchiffon2&quot;, &quot;firebrick&quot;))</code></pre>
-<p>Counting the total number of tweets per day:</p>
+<p>I used a <a href="http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf">cheatsheet</a> provided by Thian Zheng (associate professor at Columbia University) to grab my chosen colors. It’s a very handy tool: you can quickly select your favourite colors and copy-paste their R names into your script.</p>
+<p>The following code will count the total number of tweets per day:</p>
 <pre class="r"><code>sum_count_orban &lt;- 
         sent_orban %&gt;%
         group_by(date) %&gt;%
@@ -207,7 +208,7 @@ library(stringr)</code></pre>
 </div>
 <div id="sentiment-scores-for-the-search-term-viktor-orban" class="section level3">
 <h3>Sentiment scores for the search term ‘Viktor Orbán’</h3>
-<p>Creating the first plot about the sentiment scores of the first search term.</p>
+<p>Let’s draw the first plot about the sentiment scores of the first search term.</p>
 <pre class="r"><code>p_o1 &lt;- ggplot(data = sent_orban, aes(x = date, y = 1)) +
         geom_bar(stat = &quot;identity&quot;, 
                  aes(fill = factor(score, levels=rev(levels(as.factor(score)))))) +
